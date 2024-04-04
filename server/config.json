@@ -1,9 +1,9 @@
 {
-  "rds_host": "",
+  "rds_host": "database-cis550.c9wo06mw4elr.us-east-1.rds.amazonaws.com",
   "rds_port": "3306",
-  "rds_user": "",
-  "rds_password": "",
-  "rds_db": "",
+  "rds_user": "admin",
+  "rds_password": "W~Zj=ZApqjCve8~",
+  "rds_db": "YELP",
   "server_host": "localhost",
   "server_port": "8080"
 }
