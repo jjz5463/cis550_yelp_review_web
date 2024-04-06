@@ -131,14 +131,14 @@ const getUserReviews = function(req, res) {
     });
 };
 
-// Route 5: GET /categories
-// example usecase: http://localhost:8080/categories
-const getCategories = function(req, res) {
-    // Construct the SQL query to fetch distinct category names
+// Route 5: GET /business
+// example usecase: http://localhost:8080/business
+const getBusiness = function(req, res) {
+    // Construct the SQL query to fetch distinct state names
     const query = `
-        SELECT DISTINCT categories
-        FROM business
-        ORDER BY categories ASC;
+        SELECT DISTINCT b.business_id, b.name
+        FROM business b
+        ORDER BY b.name;
     `;
 
     // Execute the query
@@ -148,11 +148,7 @@ const getCategories = function(req, res) {
             return res.status(500).json({ error: "Internal server error" });
         }
 
-        // Extract categories names from the results
-        const categories = results.map(row => row.categories);
-
-        // Send back the list of categories
-        res.json({ categories });
+        res.json({ businesses: results });
     });
 };
 
