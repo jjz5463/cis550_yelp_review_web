@@ -126,8 +126,33 @@ const getUserReviews = function(req, res) {
         // Extract state names from the results
         const reviews = results.map(row => row.review);
 
-        // Send back all the reviews
+        // Send back all the reviews by one user
         res.json({ reviews });
+    });
+};
+
+// Route 5: GET /categories
+// example usecase: http://localhost:8080/categories
+const getCategories = function(req, res) {
+    // Construct the SQL query to fetch distinct category names
+    const query = `
+        SELECT DISTINCT categories
+        FROM business
+        ORDER BY categories ASC;
+    `;
+
+    // Execute the query
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        // Extract categories names from the results
+        const categories = results.map(row => row.categories);
+
+        // Send back the list of categories
+        res.json({ categories });
     });
 };
 
