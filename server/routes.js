@@ -131,39 +131,6 @@ const getUserReviews = function(req, res) {
     });
 };
 
-// Route 5: GET /userInfo?user_id=123
-const getUserInfo = function(req, res) {
-    // Extract the user_id from query parameters
-    const { user_id } = req.query;
-
-    if (!user_id) {
-        return res.status(400).json({ error: "User ID Invliad" });
-    }
-
-    // Construct the SQL query to get user info from the userInfo view
-    const query = `
-        SELECT *
-        FROM userInfo
-        WHERE user_id = '${ user_id }';
-    `;
-
-    // Execute the query
-    connection.query(query, [user_id], (err, results) => {
-        if (err) {
-            console.error("Error executing query: ", err);
-            return res.status(500).json({ error: "Internal server error" });
-        }
-
-        if (results.length === 0) {
-            return res.status(404).json({ error: "User not found" });
-        }
-
-        // Send back the user info
-        res.json(results[0]);
-    });
-};
-
-
 // Export the new route along with any existing ones
 module.exports = {
     searchBusiness,
