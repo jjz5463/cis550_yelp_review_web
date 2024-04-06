@@ -98,56 +98,91 @@ const getStates = function(req, res) {
     });
 };
 
-// Route 4: GET /userReviews?user_id=1
-// Get all reviews given a user id
-// Example: http://localhost:8080/UserReviews?user_id=1
-const getUserReviews = function(req, res) {
-    // Construct the SQL query to fetch reviews given a user id.
-
-    // Extract the user_id from query parameters
-    const { user_id } = req.query;
-
-    if (!user_id) {
-        return res.status(400).json({ error: "User ID Invalid" });
-    }
+// Route 4: GET /business/:businessId
+// example use case: http://localhost:8080/business/1
+const getBusinessInfo = function(req, res) {
+    const { businessId } = req.params;
 
     const query = `
-        SELECT  r.stars, r.useful, r.funny, r.cool, r.text, r.date, r.business_id, b.name AS business_name
-        FROM review r
-        JOIN business b ON r.business_id = b.business_id
-        WHERE r.user_id = '${ user_id }';
+        SELECT
+            business_id,
+            name,
+            categories,
+            hours,
+            address,
+            latitude,
+            longitude,
+            postal_code,
+            city,
+            state
+        FROM BusinessInfoStatic
+        WHERE business_id = ?;
     `;
 
-    // Execute the query
-    connection.query(query, (err, results) => {
+    connection.query(query, [businessId], (err, results) => {
         if (err) {
             console.error("Error executing query: ", err);
             return res.status(500).json({ error: "Internal server error" });
         }
 
-        // Send back all the reviews
-        res.json({ reviews: results });
+        if (results.length > 0) {
+            res.json(results[0]);
+        } else {
+            res.status(404).json({ error: "Business not found" });
+        }
     });
 };
 
-// Route 5: GET /business
-// example usecase: http://localhost:8080/business
-const getBusiness = function(req, res) {
-    // Construct the SQL query to fetch distinct state names
+
+// Route 5: GET business/:businessId/reviews
+// example use case: http://localhost:8080/business/1/reviews
+const getBusinessReviews = function(req, res) {
+    const { businessId } = req.params; // Extract businessId from URL parameters
+
     const query = `
-        SELECT DISTINCT b.business_id, b.name
-        FROM business b
-        ORDER BY b.name;
+        SELECT review_id, user_id, stars, text, date, useful, funny, cool
+        FROM review
+        WHERE business_id = ?
+        ORDER BY date DESC;  
     `;
 
-    // Execute the query
-    connection.query(query, (err, results) => {
+    connection.query(query, [businessId], (err, results) => {
         if (err) {
             console.error("Error executing query: ", err);
             return res.status(500).json({ error: "Internal server error" });
         }
 
-        res.json({ businesses: results });
+        // Send back the list of reviews
+        res.json(results);
+    });
+};
+
+// Route 6: GET /business/:businessId/reviewSummary
+const getReviewSummary = function(req, res) {
+    const { businessId } = req.params; // Extract businessId from URL parameters
+
+    // SQL query to get review count and average stars for the specified business
+    const query = `
+        SELECT 
+            COUNT(review_id) AS review_count, 
+            AVG(stars) AS average_stars
+        FROM review
+        WHERE business_id = ?
+    `;
+
+    connection.query(query, [businessId], (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        // Since the query returns a single row, use results[0] to send the summary back
+        if (results.length > 0) {
+            res.json(results[0]);
+        } else {
+            // If there are no reviews, return 0 count and null for average stars
+            res.json({ review_count: 0, average_stars: null });
+        }
     });
 };
 
@@ -156,5 +191,7 @@ module.exports = {
     searchBusiness,
     getCities,
     getStates,
-    getBusiness
+    getBusinessInfo,
+    getBusinessReviews,
+    getReviewSummary,
 };

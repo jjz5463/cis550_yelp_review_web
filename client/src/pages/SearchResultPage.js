@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom'; // Import Link here
 const config = require('../config.json');
 
 function useQuery() {
@@ -29,8 +29,11 @@ function SearchResultPage() {
         <div>
             <h1>Search Results</h1>
             <ul>
-                {results.map((business, index) => (
-                    <li key={index}>{business.name}</li>
+                {results.map((business) => (
+                    <li key={business.business_id}>
+                        {/* Link to the BusinessInfoPage for each business */}
+                        <Link to={`/business/${business.business_id}`}>{business.name}</Link>
+                    </li>
                 ))}
             </ul>
         </div>
@@ -38,4 +41,5 @@ function SearchResultPage() {
 }
 
 export default SearchResultPage;
+
 

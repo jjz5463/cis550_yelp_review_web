@@ -9,10 +9,28 @@ body {
     align-items: center;
 }
 
-h1 {
+h1, h2, h3 {
     color: #333;
-    text-align: center;
 }
+
+h1 {
+    text-align: center;
+    margin-top: 0; /* Avoid large space on top of the page */
+}
+
+h2 {
+    padding-top: 0.5em;
+    text-align: center;
+    border-bottom: 1px solid #eee; /* Adds a subtle line to separate sections */
+}
+
+h3 {
+    font-size: 1.2em; /* Slightly larger than regular text */
+    color: #555; /* Subdued color */
+    margin-top: 20px; /* Space above section headers */
+    text-align: left;
+}
+
 
 form {
     background-color: #fff;
@@ -61,6 +79,7 @@ li {
     margin-bottom: 10px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #eee; /* Subtle borders for each item */
 }
 
 /* For larger devices */
@@ -68,4 +87,103 @@ li {
     form {
         margin: 40px auto;
     }
+}
+
+/* Existing styles... */
+
+/* Additional styles for star ratings */
+.star-rating {
+    color: #ffc107; /* Gold color for stars */
+    font-size: 18px;
+    display: inline-flex; /* Use inline-flex to keep stars inline */
+    align-items: center; /* Align items for vertical centering */
+}
+
+.star-rating .empty-star {
+    color: #ddd; /* Light grey for empty stars */
+}
+
+.star-rating span {
+    margin-left: 4px; /* Add a small space between stars and the number */
+}
+
+.review-list {
+    width: 100%;
+    max-width: 600px; /* Adjust based on preference */
+}
+
+.review-item {
+    border-bottom: 1px solid #eee; /* Light border for each review */
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-text {
+    margin-top: 10px;
+}
+
+/* Style adjustments for SearchResultPage and BusinessInfoPage */
+.page-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Ensures no internal content can overflow */
+}
+
+/* index.css */
+.business-info-container {
+    text-align: left; /* Aligns the text to the left within the container */
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* index.css */
+
+/* Add a class for the business details */
+.business-details {
+    font-size: 16px; /* Set a consistent font size */
+    margin-bottom: 5px; /* Optional spacing between details */
+}
+
+.business-info-container strong {
+    font-weight: bold;
+    font-size: 16px; /* Match font size for strong elements */
+}
+
+/* Style for preformatted text */
+.business-info-container pre {
+    font-family: 'Courier New', Courier, monospace; /* Monospace font for alignment */
+    font-size: 16px; /* Match font size for pre elements */
+    margin-left: 20px; /* Indent for alignment */
+    white-space: pre-wrap; /* Wrap white-space */
+    word-break: keep-all; /* Prevent word breaking */
+    background-color: transparent; /* No background color */
+    padding: 0; /* Remove padding */
+    border-radius: 0; /* Remove border radius */
+}
+
+.review-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em; /* Slightly smaller font for the footer */
+}
+
+.review-votes span {
+    margin-right: 10px;
+    display: inline-block;
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 15px;
+    margin-top: 10px;
 }
