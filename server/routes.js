@@ -99,6 +99,8 @@ const getStates = function(req, res) {
 };
 
 // Route 4: GET /userReviews?user_id=1
+// Get all reviews given a user id
+// Example: http://localhost:8080/UserReviews?user_id=1
 const getUserReviews = function(req, res) {
     // Construct the SQL query to fetch reviews given a user id.
 
@@ -110,7 +112,7 @@ const getUserReviews = function(req, res) {
     }
 
     const query = `
-        SELECT r.review_id, r.user_id, r.business_id, r.stars, r.useful, r.funny, r.cool, r.text, r.date, b.name AS business_name
+        SELECT  r.stars, r.useful, r.funny, r.cool, r.text, r.date, r.business_id, b.name AS business_name
         FROM review r
         JOIN business b ON r.business_id = b.business_id
         WHERE r.user_id = '${ user_id }';
@@ -123,11 +125,8 @@ const getUserReviews = function(req, res) {
             return res.status(500).json({ error: "Internal server error" });
         }
 
-        // Extract state names from the results
-        const reviews = results.map(row => row.review);
-
-        // Send back all the reviews by one user
-        res.json({ reviews });
+        // Send back all the reviews
+        res.json({ reviews: results });
     });
 };
 
