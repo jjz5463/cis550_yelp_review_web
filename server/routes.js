@@ -98,6 +98,39 @@ const getStates = function(req, res) {
     });
 };
 
+// Route 4: GET /userReviews?user_id=1
+const getUserReviews = function(req, res) {
+    // Construct the SQL query to fetch reviews given a user id.
+
+    // Extract the user_id from query parameters
+    const { user_id } = req.query;
+
+    if (!user_id) {
+        return res.status(400).json({ error: "User ID Invalid" });
+    }
+
+    const query = `
+        SELECT r.review_id, r.user_id, r.business_id, r.stars, r.useful, r.funny, r.cool, r.text, r.date, b.name AS business_name
+        FROM review r
+        JOIN business b ON r.business_id = b.business_id
+        WHERE r.user_id = '${ user_id }';
+    `;
+
+    // Execute the query
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        // Extract state names from the results
+        const states = results.map(row => row.review);
+
+        // Send back the list of states
+        res.json({ states });
+    });
+};
+
 
 // Export the new route along with any existing ones
 module.exports = {
