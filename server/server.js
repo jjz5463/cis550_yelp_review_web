@@ -13,6 +13,7 @@ app.use(cors({
 app.get('/searchBusiness', routes.searchBusiness);
 app.get('/cities', routes.getCities);
 app.get('/states', routes.getStates);
+app.get('/userReviews', routes.getUserReviews);
 app.get('/business', routes.getBusiness);
 
 
