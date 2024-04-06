@@ -17,8 +17,8 @@ connection.connect((err) => err && console.log(err));
  ******************/
 
 // Route 1: GET /searchBusiness
-    // Route: GET /searchBusiness
-    // input business name (not have to be exact), city, state -> return a list of matching business
+// input business name (not have to be exact), city, state -> return a list of matching business
+// example use case: http://localhost:8080/searchBusiness?name=alice&city=Santa%20Barbara&state=CA
 const searchBusiness = function(req, res) {
     // Extract query parameters
     const { name, city, state } = req.query;
@@ -47,8 +47,61 @@ const searchBusiness = function(req, res) {
     });
 };
 
+// Route 2: GET /cities
+// example use case: http://localhost:8080/cities
+const getCities = function(req, res) {
+    // Construct the SQL query to fetch distinct city names
+    const query = `
+        SELECT DISTINCT z.city
+        FROM address a
+        JOIN zipcode z ON a.postal_code = z.postal_code
+        ORDER BY z.city ASC;
+    `;
+
+    // Execute the query
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        // Extract city names from the results
+        const cities = results.map(row => row.city);
+
+        // Send back the list of cities
+        res.json({ cities });
+    });
+};
+
+// Route 3: GET /states
+// example usecase: http://localhost:8080/states
+const getStates = function(req, res) {
+    // Construct the SQL query to fetch distinct state names
+    const query = `
+        SELECT DISTINCT z.state
+        FROM zipcode z
+        ORDER BY z.state ASC;
+    `;
+
+    // Execute the query
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        // Extract state names from the results
+        const states = results.map(row => row.state);
+
+        // Send back the list of states
+        res.json({ states });
+    });
+};
+
 
 // Export the new route along with any existing ones
 module.exports = {
-    searchBusiness // Add your new route here
+    searchBusiness,
+    getCities,
+    getStates,
 };
