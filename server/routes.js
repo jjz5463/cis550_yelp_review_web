@@ -157,4 +157,5 @@ module.exports = {
     searchBusiness,
     getCities,
     getStates,
+    getBusiness
 };
