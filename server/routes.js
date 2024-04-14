@@ -23,29 +23,42 @@ const searchBusiness = function(req, res) {
     // Extract query parameters
     const { name, city, state } = req.query;
 
-    // Construct the SQL query with LIKE for partial match on name
-    const query = `
+    // Start constructing the SQL query, initially without WHERE clauses
+    let query = `
         SELECT b.business_id, b.name
         FROM business b
         JOIN address a ON b.address_id = a.address_id
         JOIN zipcode z ON a.postal_code = z.postal_code
-        WHERE b.name LIKE ? AND z.city = ? AND z.state = ?;
+        WHERE 1=1
     `;
 
-    // Prepare the name parameter for the LIKE clause
-    const nameLike = `%${name}%`;
+    const queryParams = [];
 
-    // Execute the query
-    connection.query(query, [nameLike, city, state], (err, results) => {
+   
+    if (name) {
+        query += ` AND b.name LIKE ?`;
+        queryParams.push(`%${name}%`);
+    }
+    if (city) {
+        query += ` AND z.city = ?`;
+        queryParams.push(city);
+    }
+    if (state) {
+        query += ` AND z.state = ?`;
+        queryParams.push(state);
+    }
+    connection.query(query, queryParams, (err, results) => {
         if (err) {
             console.error("Error executing query: ", err);
             return res.status(500).json({ error: "Internal server error" });
         }
 
-        // Send back the results
+       
         res.json(results);
     });
 };
+
+
 
 // Route 2: GET /cities
 // example use case: http://localhost:8080/cities
