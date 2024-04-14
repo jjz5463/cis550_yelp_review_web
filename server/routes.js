@@ -29,7 +29,6 @@ const searchBusiness = function(req, res) {
         FROM business b
         JOIN address a ON b.address_id = a.address_id
         JOIN zipcode z ON a.postal_code = z.postal_code
-        WHERE 1=1
     `;
 
     const queryParams = [];
