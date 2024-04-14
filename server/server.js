@@ -16,6 +16,9 @@ app.get('/states', routes.getStates);
 app.get('/business/:businessId', routes.getBusinessInfo);
 app.get('/business/:businessId/reviews', routes.getBusinessReviews);
 app.get('/business/:businessId/reviewSummary', routes.getReviewSummary);
+app.get('/user/:userId/info', routes.getUserInfo);
+app.get('/user/:userId/reviews', routes.getUserReviews);
+app.get('/user/:userId/reviewSummary', routes.getUserReviewSummary);
 // app.get('/userReviews', routes.getUserReviews);
 
 

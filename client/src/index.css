@@ -187,3 +187,49 @@ li {
     border-radius: 15px;
     margin-top: 10px;
 }
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; /* Add space between the header and the rest of the review content */
+}
+
+.review-username {
+    font-weight: bold;
+    color: #007bff; /* Bootstrap default link color */
+    text-decoration: none; /* Remove underline */
+    margin-right: 10px; /* Add space between the username and the date */
+}
+
+.review-username:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
+.review-date {
+    font-size: 0.85em;
+    color: #6c757d; /* A muted color for the date text */
+}
+
+.user-info-header {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center-align the items horizontally */
+    text-align: center; /* Center-align text for all children */
+    margin-bottom: 20px;
+}
+
+.user-avatar {
+    width: 100px; /* Adjust size as needed */
+    height: 100px; /* Adjust size as needed */
+    border-radius: 50%; /* Makes the image round */
+    margin-bottom: 10px; /* Space between avatar and name */
+}
+
+.user-name {
+    margin-top: 0; /* Remove any top margin from the h2 element */
+    margin-bottom: 10px; /* Space between name and 'Yelping Since' */
+}
+
+
+

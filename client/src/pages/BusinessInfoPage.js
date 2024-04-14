@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 const config = require('../config.json');
 
 function BusinessInfoPage() {
@@ -89,18 +89,22 @@ function BusinessInfoPage() {
             <h3>Reviews</h3>
             <ul>
                 {reviews.map(review => (
-                    <li key={review.review_id}>
+                    <li key={review.review_id} className="review-item">
+                        <div className="review-header">
+                            {/* Move the Link for the username here */}
+                            <Link to={`/user/${review.user_id}/info`} className="review-username">{review.name}</Link>
+                            <span className="review-date">{formatDate(review.date)}</span>
+                        </div>
                         <div className="review-rating">
                             <strong>Rating:</strong> {renderStars(review.stars)} ({review.stars.toFixed(1)})
                         </div>
                         <div className="review-text">{review.text}</div>
                         <div className="review-footer">
-                            <span className="review-date">{formatDate(review.date)}</span>
                             <span className="review-votes">
-                    <span className="useful">👍 {review.useful}</span>
-                    <span className="funny">😄 {review.funny}</span>
-                    <span className="cool">😎 {review.cool}</span>
-                </span>
+                                <span className="useful">👍 {review.useful}</span>
+                                <span className="funny">😄 {review.funny}</span>
+                                <span className="cool">😎 {review.cool}</span>
+                            </span>
                         </div>
                     </li>
                 ))}

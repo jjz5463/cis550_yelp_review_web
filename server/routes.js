@@ -152,10 +152,11 @@ const getBusinessReviews = function(req, res) {
     const { businessId } = req.params; // Extract businessId from URL parameters
 
     const query = `
-        SELECT review_id, user_id, stars, text, date, useful, funny, cool
-        FROM review
+        SELECT review_id, r.user_id, u.name, stars, text, date, useful, funny, cool
+        FROM review r
+        JOIN user u ON r.user_id = u.user_id
         WHERE business_id = ?
-        ORDER BY date DESC;  
+        ORDER BY date DESC; 
     `;
 
     connection.query(query, [businessId], (err, results) => {
@@ -198,6 +199,80 @@ const getReviewSummary = function(req, res) {
     });
 };
 
+// Route 7: GET /user/:userId/info
+const getUserInfo = function(req, res) {
+    const { userId } = req.params;
+
+    const query = `
+        SELECT
+            user_id,
+            name,
+            yelping_since
+        FROM user
+        WHERE user_id = ?;
+    `;
+
+    connection.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        if (results.length > 0) {
+            res.json(results[0]);
+        } else {
+            res.status(404).json({ error: "User not found" });
+        }
+    });
+};
+
+// Route 8: GET /user/:userId/reviews
+const getUserReviews = function(req, res) {
+    const { userId } = req.params;
+
+    const query = `
+        SELECT review_id, business_id, stars, text, date, useful, funny, cool
+        FROM review
+        WHERE user_id = ?
+        ORDER BY date DESC;
+    `;
+
+    connection.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        res.json(results);
+    });
+};
+
+// Route 9: GET /user/:userId/reviewSummary
+const getUserReviewSummary = function(req, res) {
+    const { userId } = req.params;
+
+    const query = `
+        SELECT 
+            COUNT(review_id) AS review_count, 
+            AVG(stars) AS average_stars
+        FROM review
+        WHERE user_id = ?
+    `;
+
+    connection.query(query, [userId], (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        if (results.length > 0) {
+            res.json(results[0]);
+        } else {
+            res.json({ review_count: 0, average_stars: null });
+        }
+    });
+};
+
 // Export the new route along with any existing ones
 module.exports = {
     searchBusiness,
@@ -206,4 +281,7 @@ module.exports = {
     getBusinessInfo,
     getBusinessReviews,
     getReviewSummary,
+    getUserInfo,
+    getUserReviews,
+    getUserReviewSummary
 };
