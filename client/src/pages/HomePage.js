@@ -31,7 +31,7 @@ function HomePage() {
     };
 
     return (
-        <div>
+        <div className="page-container"> {/* This wraps your content and centers it */}
             <h1>Business Search</h1>
             <form onSubmit={handleSearch}>
                 <input

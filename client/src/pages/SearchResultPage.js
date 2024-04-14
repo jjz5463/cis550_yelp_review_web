@@ -44,12 +44,12 @@ function SearchResultPage() {
 
     // Render loading message or results
     return (
-        <div>
+        <div className="page-container">
             <h1>Search Results</h1>
             {isLoading ? (
                 <p>Loading results...</p>
             ) : (
-                results.length > 0 ? ( // Check if there are results
+                results.length > 0 ? (
                     <ul>
                         {results.map((business) => (
                             <li key={business.business_id}>
@@ -58,7 +58,7 @@ function SearchResultPage() {
                         ))}
                     </ul>
                 ) : (
-                    <p>No results found.</p> // Display a message if there are no results
+                    <p>No results found.</p>
                 )
             )}
         </div>
