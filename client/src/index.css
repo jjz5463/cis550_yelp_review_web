@@ -267,6 +267,38 @@ li {
     margin-bottom: 10px; /* Space between name and 'Yelping Since' */
 }
 
+/* index.css or wherever your styles are defined */
+.loading-image {
+    width: 250px; /* Set the width as needed */
+    height: 200px; /* Set the height as needed */
+    display: block; /* Makes it a block element */
+    margin: auto; /* Centers the image horizontally in the container */
+    position: absolute; /* Position it relative to its nearest positioned ancestor */
+    top: 300px; /* Position the top edge of the element at the middle of the container */
+    left: 50%; /* Position the left edge of the element at the middle of the container */
+    transform: translate(-50%, -50%); /* Move the element up by half its height and left by half its width */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* Centers content horizontally */
+    margin-top: 10px;
+}
+
+.nearby-button {
+    background-color: #b01b1b; /* Red background color */
+    color: white; /* White text color */
+    padding: 10px 20px; /* Smaller padding */
+    border: none; /* No border */
+    border-radius: 40px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    align-items: center;
+}
+
+.nearby-button:hover {
+    background-color: #ff6666; /* Lighter red on hover */
+}
+
 
 @media (min-width: 600px) {
     /* Adjustments for larger devices */

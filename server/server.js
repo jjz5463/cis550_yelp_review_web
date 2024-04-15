@@ -19,8 +19,10 @@ app.get('/business/:businessId/reviewSummary', routes.getReviewSummary);
 app.get('/user/:userId/info', routes.getUserInfo);
 app.get('/user/:userId/reviews', routes.getUserReviews);
 app.get('/user/:userId/reviewSummary', routes.getUserReviewSummary);
-// app.get('/userReviews', routes.getUserReviews);
-
+app.get('/top-users', routes.getTopUsers);
+app.get('/top-business', routes.getTopBusiness);
+app.get('/featured-review/:businessId', routes.featuredReview);
+app.get('/nearby-businesses/:latitude/:longitude', routes.getNearbyBusinessesWithRatings);
 
 app.listen(config.server_port, () => {
     console.log(`Server running at http://${config.server_host}:${config.server_port}/`)

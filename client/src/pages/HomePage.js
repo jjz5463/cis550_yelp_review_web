@@ -30,8 +30,22 @@ function HomePage() {
         navigate(`/searchresult?name=${encodeURIComponent(businessName)}&city=${encodeURIComponent(city)}&state=${encodeURIComponent(state)}`);
     };
 
+    const handleNearbyBusinesses = () => {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const { latitude, longitude } = position.coords;
+                navigate(`/nearby?latitude=${latitude}&longitude=${longitude}`);
+            },
+            error => {
+                console.error('Error obtaining location:', error);
+                alert('Failed to retrieve location. Please ensure location services are enabled.');
+            }
+        );
+    };
+
     return (
         <div className="page-container"> {/* This wraps your content and centers it */}
+            <button onClick={handleNearbyBusinesses} className="nearby-button">Find Nearby Businesses</button>
             <h1>Business Search</h1>
             <form onSubmit={handleSearch}>
                 <input

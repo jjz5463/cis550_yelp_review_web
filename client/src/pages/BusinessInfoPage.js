@@ -5,8 +5,9 @@ const config = require('../config.json');
 function BusinessInfoPage() {
     const { businessId } = useParams();
     const [businessInfo, setBusinessInfo] = useState(null);
-    const [reviewSummary, setReviewSummary] = useState(null); // Add state for review summary
+    const [reviewSummary, setReviewSummary] = useState(null);
     const [reviews, setReviews] = useState([]);
+    const [featuredReview, setFeaturedReview] = useState(null);
     const baseUrl = `http://${config.server_host}:${config.server_port}`;
 
     useEffect(() => {
@@ -25,6 +26,12 @@ function BusinessInfoPage() {
             .then(response => response.json())
             .then(data => setReviews(data))
             .catch(error => console.error("Failed to fetch reviews:", error));
+
+        // Fetch featured review
+        fetch(`${baseUrl}/featured-review/${businessId}`)
+            .then(response => response.json())
+            .then(data => setFeaturedReview(data))
+            .catch(error => console.error("Failed to fetch featured review:", error));
     }, [businessId, baseUrl]);
 
     // render stars
@@ -65,6 +72,15 @@ function BusinessInfoPage() {
         return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
+    // Display Featured Review
+    const featuredReviewContent = featuredReview && featuredReview.review_text ? (
+        <div>
+            <h3>Featured Review</h3>
+            <p>{featuredReview.review_text}</p>
+            <p><strong>Impact Score:</strong> {featuredReview.impact_score}</p>
+        </div>
+    ) : <div><h3>Featured Review</h3><p>Not enough reviews to generate a featured review.</p></div>
+
     if (!businessInfo || !reviewSummary) return <div>Loading business info...</div>;
 
     const formattedHours = businessInfo.hours ? formatHours(businessInfo.hours) : 'Hours not available';
@@ -86,7 +102,8 @@ function BusinessInfoPage() {
                 ) : 'N/A '}
                 from {reviewSummary.review_count ? reviewSummary.review_count : 'N/A '} reviews
             </div>
-            <h3>Reviews</h3>
+            {featuredReviewContent}
+            <h3>All Reviews</h3>
             <ul>
                 {reviews.map(review => (
                     <li key={review.review_id} className="review-item">

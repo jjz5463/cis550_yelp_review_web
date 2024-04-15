@@ -5,6 +5,9 @@ import SearchResultPage from './pages/SearchResultPage';
 import BusinessInfoPage from './pages/BusinessInfoPage';
 import UserInfoPage from './pages/UserInfoPage';
 import NavigationBar from './components/NavigationBar';
+import TopUserPage from './pages/TopUserPage'
+import TopBusinessPage from './pages/TopBusinessPage';
+import NearbyBusinessPage from './pages/NearbyBusinessPage';
 // Other imports if necessary
 
 function App() {
@@ -17,8 +20,9 @@ function App() {
                 <Route path="/searchresult" element={<SearchResultPage />} />
                 <Route path="/business/:businessId" element={<BusinessInfoPage />} />
                 <Route path="/user/:userId/info" element={<UserInfoPage />} />
-                <Route path="/top_business" element={<div>Top Business Page Placeholder</div>} />
-                <Route path="/top_user" element={<div>Top User Page Placeholder</div>} />
+                <Route path="/top_business" element={<TopBusinessPage />} />
+                <Route path="/top_user" element={<TopUserPage />} />
+                <Route path="/nearby" element={<NearbyBusinessPage />} />
             </Routes>
             </div>
         </Router>

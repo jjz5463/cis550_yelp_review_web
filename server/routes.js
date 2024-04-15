@@ -273,6 +273,148 @@ const getUserReviewSummary = function(req, res) {
     });
 };
 
+// Route 10: GET /top-users (Complex, about 18s to run)
+const getTopUsers = function(req, res) {
+    const query = `
+        SELECT
+            u.user_id,
+            u.name,
+            COUNT(r.review_id) AS review_count
+        FROM
+            user u
+        JOIN review r ON u.user_id = r.user_id
+        GROUP BY
+            u.user_id
+        ORDER BY review_count DESC
+        LIMIT 20;
+    `;
+
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        res.json(results);
+    });
+};
+
+// Route 11: GET /top-business (Complex, about 6s to run)
+const getTopBusiness = function(req, res) {
+    const query = `
+        SELECT
+            b.business_id,
+            b.name,
+            COUNT(r.review_id) AS review_count
+        FROM 
+            business b
+        JOIN review r ON b.business_id = r.business_id
+        GROUP BY 
+            b.business_id
+        ORDER BY review_count DESC
+        LIMIT 20;
+    `;
+
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        res.json(results);
+    });
+};
+
+// Route 12: GET /featured-review/:businessId (complex, 3 secs)
+const featuredReview = function(req, res) {
+    const { businessId } = req.params;
+
+    const query = `
+        WITH ReviewCounts AS (
+            SELECT
+                business_id,
+                COUNT(review_id) AS reviews_count
+            FROM
+                review
+            GROUP BY
+                business_id
+            HAVING
+                COUNT(review_id) >= 10
+        ), ReviewImpactScores AS (
+            SELECT
+                r.business_id,
+                r.review_id,
+                r.text AS review_text,
+                (r.useful + r.funny + r.cool) AS impact_score,
+                ROW_NUMBER() OVER (PARTITION BY r.business_id ORDER BY (r.useful + r.funny + r.cool) DESC) AS \`rank\`
+            FROM
+                review r
+            JOIN ReviewCounts rc ON r.business_id = rc.business_id
+        )
+        SELECT
+            ris.business_id,
+            ris.review_id,
+            ris.review_text,
+            ris.impact_score
+        FROM
+            ReviewImpactScores ris
+        WHERE
+            ris.\`rank\` = 1 AND ris.business_id = ?
+        ORDER BY
+            ris.business_id;
+    `;
+
+    connection.query(query, [businessId], (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        if (results.length > 0) {
+            res.json(results[0]);
+        } else {
+            res.status(404).json({ error: "No featured review found for this business." });
+        }
+    });
+};
+
+// Route 13: GET /nearby-businesses/:latitude/:longitude (complex, 2 secs)
+// Route to get nearby businesses to a specified location
+const getNearbyBusinessesWithRatings = function(req, res) {
+    const { latitude, longitude } = req.params;
+
+    const query = `
+        SELECT
+            b.business_id,
+            b.name,
+            a.latitude,
+            a.longitude,
+            ST_Distance_Sphere(point(a.longitude, a.latitude), point(?, ?)) AS distance_in_meters,
+            COALESCE(AVG(r.stars), 0) AS average_stars,
+            COALESCE(COUNT(r.review_id), 0) AS review_count
+        FROM
+            business b
+        JOIN address a ON b.address_id = a.address_id
+        LEFT JOIN review r ON b.business_id = r.business_id
+        WHERE
+            ST_Distance_Sphere(point(a.longitude, a.latitude), point(?, ?)) <= 1609.34
+        GROUP BY
+            b.business_id, b.name, a.latitude, a.longitude
+        ORDER BY distance_in_meters ASC;
+    `;
+
+    // Execute the query with latitude and longitude parameters twice
+    connection.query(query, [longitude, latitude, longitude, latitude], (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        if (results.length > 0) {
+            res.json(results);
+        } else {
+            res.status(404).json({ error: "No nearby businesses found within 1 mile." });
+        }
+    });
+};
+
+
 // Export the new route along with any existing ones
 module.exports = {
     searchBusiness,
@@ -283,5 +425,9 @@ module.exports = {
     getReviewSummary,
     getUserInfo,
     getUserReviews,
-    getUserReviewSummary
+    getUserReviewSummary,
+    getTopUsers,
+    getTopBusiness,
+    featuredReview,
+    getNearbyBusinessesWithRatings
 };
