@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'; // Removed useLocation, useQuery as they're not needed here
+import { Link } from 'react-router-dom';
 const config = require('../config.json');
 
 function NearbyBusinessPage() {
     const [results, setResults] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); // Set loading true by default
+    const [isLoading, setIsLoading] = useState(true);
     const baseUrl = `http://${config.server_host}:${config.server_port}`;
 
     useEffect(() => {
-        // Fetch user's location and nearby businesses
         navigator.geolocation.getCurrentPosition((position) => {
             const { latitude, longitude } = position.coords;
             const nearbyUrl = `${baseUrl}/nearby-businesses/${latitude}/${longitude}`;
-
             fetch(nearbyUrl)
                 .then(response => response.json())
                 .then(data => {
@@ -29,6 +27,17 @@ function NearbyBusinessPage() {
         });
     }, [baseUrl]);
 
+    // Helper function to render stars using Unicode characters
+    const renderStars = (rating) => {
+        const fullStar = '★';
+        const emptyStar = '☆';
+        let stars = '';
+        for (let i = 0; i < 5; i++) {
+            stars += i < Math.floor(rating) ? fullStar : emptyStar;
+        }
+        return stars;
+    };
+
     return (
         <div className="page-container">
             <h1>Nearby Businesses</h1>
@@ -40,7 +49,8 @@ function NearbyBusinessPage() {
                         {results.map((business) => (
                             <li key={business.business_id}>
                                 <Link to={`/business/${business.business_id}`}>
-                                    {business.name} - {business.average_stars.toFixed(2)} Stars
+                                    {business.name} - {renderStars(business.average_stars)}
+                                    {business.distance_in_meters && <span> ({business.distance_in_meters.toFixed(0)} m)</span>}
                                 </Link>
                             </li>
                         ))}
@@ -54,3 +64,4 @@ function NearbyBusinessPage() {
 }
 
 export default NearbyBusinessPage;
+
