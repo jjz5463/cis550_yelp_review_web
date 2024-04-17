@@ -38,7 +38,6 @@ function TopUsersPage() {
                     </li>
                 ))}
             </ul>
-            )}
         </div>
     );
 }
