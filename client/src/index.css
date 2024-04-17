@@ -85,25 +85,54 @@ button:hover {
     padding: 20px;
     background-color: #fff;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
 ul {
     list-style: none;
     padding: 0;
-    width: 100%;
-    max-width: 800px; /* Consistent with the form */
-    margin: auto;
+    /* width: 100%;
+    max-width: 800px; 
+    margin: auto; */
+    margin: 0;
 }
 
-li {
+/* li {
     background-color: #fff;
     padding: 20px;
     margin-bottom: 10px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border: 1px solid #eee;
+} */
+
+li {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 15px; /* Increased bottom margin for better spacing */
+    border-radius: 6px; /* Consistent rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow for a "lifted" effect */
+    border: 1px solid #d0d0d0; /* Lighter border for a softer look */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+}
+
+li:hover {
+    transform: translateY(-5px); /* Slight raise effect on hover for interaction feedback */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover for emphasis */
+}
+
+h1 {
+    color: #333; /* Darker color for better readability */
+    text-align: center; /* Center the title */
+    margin-bottom: 20px; /* Added space below the title */
+}
+
+/* Optional: Add a bit of style to the links inside the list items */
+li a {
+    text-decoration: none; /* Remove underline from links */
+    color: #007BFF; /* A pleasant blue for links */
+    font-weight: bold; /* Make link text bold */
 }
 
 
