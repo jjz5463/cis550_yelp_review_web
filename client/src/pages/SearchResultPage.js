@@ -115,7 +115,7 @@ function SearchResultPage() {
                     {hasMoreResults ? (
                         <div id="loader" style={{ visibility: hasMoreResults ? 'visible' : 'hidden' }}>Loading more...</div>
                     ) : (
-                        <div>No more results.</div>
+                        <div style={{ color: 'lightgray', textAlign: 'center', fontSize: '16px' }}>End of results</div>
                     )}
                 </>
             )}
