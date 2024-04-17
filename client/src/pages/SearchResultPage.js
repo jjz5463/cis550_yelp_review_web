@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 // import Pagination from '../components/Pagination';
 const config = require('../config.json');
@@ -19,6 +19,17 @@ function SearchResultPage() {
     const resultsPerPage = 30;
     const query = useQuery();
     const baseUrl = `http://${config.server_host}:${config.server_port}`;
+
+    const loadMoreResults = useCallback(() => {
+        if (lastIndex >= results.length) {
+            console.log(lastIndex >= results.length);
+            setHasMoreResults(false);
+            return; // No more results to load, so exit the function
+        }
+        const moreResults = results.slice(lastIndex, lastIndex + resultsPerPage);
+        setDisplayedResults(prevResults => [...prevResults, ...moreResults]);
+        setLastIndex(prevLastIndex => lastIndex + resultsPerPage);
+    }, [lastIndex, results, resultsPerPage]); // useCallback to stabilize the function
 
     useEffect(() => {
         // Flag to keep track if the component is mounted
@@ -75,25 +86,14 @@ function SearchResultPage() {
                 observer.unobserve(loader);
             }
         };
-    }, [isLoading]); // Empty dependency array ensures the effect only runs once
-    
-    const loadMoreResults = () => {
-        if (lastIndex >= results.length) {
-            console.log(lastIndex >= results.length);
-            setHasMoreResults(false);
-            return; // No more results to load, so exit the function
-        }
-        const moreResults = results.slice(lastIndex, lastIndex + resultsPerPage);
-        setDisplayedResults(prevResults => [...prevResults, ...moreResults]);
-        setLastIndex(lastIndex + resultsPerPage);
-    };
+    }, [isLoading, hasMoreResults, loadMoreResults]); // Empty dependency array ensures the effect only runs once
 
     useEffect(() => {
         if (isLoading) {
             return;
         }
         loadMoreResults();
-    }, [isLoading]); // Loads the initial results
+    }, [isLoading, loadMoreResults]); // Loads the initial results
     
 
     // Render loading message or results
