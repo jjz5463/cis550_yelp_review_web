@@ -78,34 +78,41 @@ button:hover {
     background-color: #45a049;
 }
 
+/* Ensure content below navbar is visible */
+.page-content {
+    padding-top: 0px; /* Height of the navbar */
+}
+
 .page-container {
     width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
+    max-width: 1200px;
+    margin: auto;
+    /* margin: 20px auto; */
     padding: 20px;
     background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    /* border-radius: 5px; */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Ensures no internal content can overflow */
+}
+
+@media (max-width: 768px) { /* For tablets and smaller devices */
+    .page-container {
+        width: 95%;
+    }
+}
+
+@media (max-width: 480px) { /* For mobile phones */
+    .page-container {
+        width: 100%;
+        padding: 0 10px; /* Adds padding so content doesn't touch the screen edges */
+    }
 }
 
 ul {
     list-style: none;
     padding: 0;
-    /* width: 100%;
-    max-width: 800px; 
-    margin: auto; */
     margin: 0;
 }
-
-/* li {
-    background-color: #fff;
-    padding: 20px;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border: 1px solid #eee;
-} */
 
 li {
     background-color: #fff;
@@ -136,10 +143,7 @@ li a {
 }
 
 
-/* Ensure content below navbar is visible */
-.page-content {
-    padding-top: 60px; /* Height of the navbar */
-}
+
 
 
 
@@ -178,16 +182,6 @@ li a {
     margin-top: 10px;
 }
 
-/* Style adjustments for SearchResultPage and BusinessInfoPage */
-.page-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden; /* Ensures no internal content can overflow */
-}
 
 .search-results-container {
     max-width: 800px; /* Adjust this to match the width of your navigation bar */
@@ -321,14 +315,77 @@ li a {
     border: none; /* No border */
     border-radius: 40px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
-    align-items: center;
+    width: 50%;
 }
 
 .nearby-button:hover {
     background-color: #ff6666; /* Lighter red on hover */
 }
 
-
-@media (min-width: 600px) {
-    /* Adjustments for larger devices */
+/* General styling for the navigation surrounding the pagination */
+nav {
+    text-align: center; /* Center the pagination nav */
+    margin-top: 20px; /* Space above the pagination */
 }
+
+/* Pagination */
+/* Styling for each pagination item */
+.page-item {
+    list-style: none; /* Removes default list styling */
+    padding: 0;
+    display: inline-block; /* Aligns the list items in a row */
+}
+
+/* Styling for pagination links */
+.page-link {
+    display: inline-block; /* Block display to control padding and margins */
+    padding: 5px 10px; /* Padding around the numbers */
+    margin-right: 2px; /* Space between pagination items */
+    font-size: 12px; /* Smaller font size */
+    border-radius: 3px; /* Rounded corners for the links */
+    text-decoration: none; /* Removes underline from links */
+    color: #000000; /* Link color */
+    background-color: #fff; /* Background color for the links */
+    border: 1px solid #ddd; /* Border color */
+}
+
+  
+
+.page-item.disabled a, .page-item.disabled a:hover {
+    color: rgb(129, 118, 118);
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  
+  .page-item.active a {
+    font-weight: bold;
+    color: red;
+  }
+  
+  .pagination {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  .pagination ul {
+    display: inline;
+    margin-right: 5px;
+  }
+  .pagination li {
+    display: inline;
+    margin-right: 5px;
+  }
+
+  .page-input[type="number"] {
+    width: 100%; /* Ensures the input takes the full width of its container */
+    padding: 12px 20px; /* Increases padding for larger touch area */
+    font-size: 16px; /* Larger font size for better readability */
+    margin: 8px 0; /* Adds space around the input for better layout */
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Makes sure padding and border are included in width/height */
+}
+
+  
+
+
