@@ -414,6 +414,35 @@ const getNearbyBusinessesWithRatings = function(req, res) {
     });
 };
 
+// Route 14: GET /top-business/:city (Complex, about 6s to run)
+const getTopBusinessByCity = function(req, res) {
+    const city = req.params.city; // get the city from the URL parameter
+    const query = `
+        SELECT
+            b.business_id,
+            b.name,
+            COUNT(r.review_id) AS review_count
+        FROM 
+            business b
+        JOIN address a ON b.address_id = a.address_id
+        JOIN zipcode z ON a.postal_code = z.postal_code
+        JOIN review r ON b.business_id = r.business_id
+        WHERE z.city = ?
+        GROUP BY 
+            b.business_id
+        ORDER BY review_count DESC
+        LIMIT 20;
+    `;
+
+    connection.query(query, [city], (err, results) => {
+        if (err) {
+            console.error("Error executing query: ", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+        res.json(results);
+    });
+};
+
 
 // Export the new route along with any existing ones
 module.exports = {
@@ -429,5 +458,6 @@ module.exports = {
     getTopUsers,
     getTopBusiness,
     featuredReview,
-    getNearbyBusinessesWithRatings
+    getNearbyBusinessesWithRatings,
+    getTopBusinessByCity
 };
